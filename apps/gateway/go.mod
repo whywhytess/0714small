@@ -1,3 +1,3 @@
-module github.com/whywhytess/small0714/apps/gateway
+module github.com/whywhytess/0714small/apps/gateway
 
 go 1.27.1
