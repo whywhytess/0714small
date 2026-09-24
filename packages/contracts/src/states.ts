@@ -9,3 +9,6 @@ export type SiteStatus = (typeof SITE_STATUSES)[number];
 /** 部署状态；只有 READY 可以成为 current（ADR 0006） */
 export const DEPLOYMENT_STATES = ["PREPARING", "READY", "FAILED"] as const;
 export type DeploymentState = (typeof DEPLOYMENT_STATES)[number];
+
+// 故意制造 lint 错误，用于验证分支保护（此 PR 不得合并）
+const intentionallyUnused = 1;
