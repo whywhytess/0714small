@@ -1,0 +1,37 @@
+{
+  "name": "small0714",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.6.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @small0714/web dev",
+    "build": "pnpm -r build",
+    "lint": "eslint .",
+    "typecheck": "pnpm -r typecheck && tsc --noEmit -p tsconfig.json",
+    "test": "vitest run --project unit",
+    "test:integration": "vitest run --project integration",
+    "infra:up": "docker compose -f infra/compose/compose.yaml up -d --wait",
+    "infra:down": "docker compose -f infra/compose/compose.yaml down",
+    "infra:reset": "docker compose -f infra/compose/compose.yaml down -v",
+    "infra:init": "pnpm db:migrate && tsx --env-file-if-exists=.env scripts/storage-init.ts",
+    "db:migrate": "pnpm --filter @small0714/db migrate",
+    "db:generate": "pnpm --filter @small0714/db generate",
+    "smoke": "tsx --env-file-if-exists=.env scripts/smoke.ts",
+    "secrets:scan": "docker run --rm -v \"$PWD:/repo:ro\" ghcr.io/gitleaks/gitleaks:v8.30.1 git /repo --no-banner --redact"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-s3": "~3.1138.0",
+    "@eslint/js": "^10.0.1",
+    "@next/eslint-plugin-next": "16.3.6",
+    "@types/node": "^24.13.6",
+    "eslint": "^10.11.0",
+    "postgres": "^3.4.9",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.70.1",
+    "vitest": "^5.0.1"
+  }
+}

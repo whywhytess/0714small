@@ -1,0 +1,56 @@
+# 本地开发与 CI 的依赖：PostgreSQL + MinIO + Mailpit。不使用 Redis（ADR 0004）。
+# 默认值与根目录 .env.example 一致；只用于本地，不用于 staging/生产。
+name: small0714
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: small0714
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:-postgres_dev_password}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:-app_dev_password}
+      GATEWAY_DB_PASSWORD: ${GATEWAY_DB_PASSWORD:-gateway_dev_password}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-55432}:5432"
+    volumes:
+      - ./postgres/init-roles.sh:/docker-entrypoint-initdb.d/10-init-roles.sh:ro
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d small0714"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  minio:
+    # MinIO 社区版已不在 Docker Hub 发布；固定 quay.io 上已知可用的版本（ADR 0005）。
+    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minio_dev}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minio_dev_password}
+    ports:
+      - "127.0.0.1:${MINIO_PORT:-59000}:9000"
+      - "127.0.0.1:${MINIO_CONSOLE_PORT:-59001}:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:9000/minio/health/live"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  mailpit:
+    image: axllent/mailpit:v1.27
+    ports:
+      - "127.0.0.1:1025:1025"
+      - "127.0.0.1:8025:8025"
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  postgres-data:
+  minio-data:

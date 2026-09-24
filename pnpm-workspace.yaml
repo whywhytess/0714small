@@ -1,0 +1,7 @@
+packages:
+  - apps/web
+  - packages/*
+
+# 只允许明确列出的依赖运行安装脚本（供应链风险，威胁表 T16）
+allowBuilds:
+  esbuild: true

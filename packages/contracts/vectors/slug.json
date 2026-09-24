@@ -1,0 +1,30 @@
+{
+  "description": "slug 语法：3-32 位，a-z0-9 和连字符，不以连字符开头或结尾，不含连续连字符。保留词另行校验。",
+  "cases": [
+    { "input": "alice", "valid": true },
+    { "input": "abc", "valid": true, "note": "最短 3 位" },
+    { "input": "a1b2c3", "valid": true },
+    { "input": "my-site", "valid": true },
+    { "input": "a-b-c", "valid": true },
+    { "input": "123", "valid": true, "note": "允许纯数字" },
+    { "input": "abcdefghijklmnopqrstuvwxyz012345", "valid": true, "note": "最长 32 位" },
+
+    { "input": "", "valid": false },
+    { "input": "ab", "valid": false, "note": "太短" },
+    { "input": "abcdefghijklmnopqrstuvwxyz0123456", "valid": false, "note": "33 位" },
+    { "input": "Alice", "valid": false, "note": "不接受大写，不做自动转换" },
+    { "input": "-abc", "valid": false },
+    { "input": "abc-", "valid": false },
+    { "input": "a--b", "valid": false },
+    { "input": "xn--abc", "valid": false, "note": "punycode 前缀" },
+    { "input": "a_b", "valid": false },
+    { "input": "a.b", "valid": false },
+    { "input": "a b", "valid": false },
+    { "input": " abc", "valid": false },
+    { "input": "abc\n", "valid": false },
+    { "input": "ümlaut", "valid": false, "note": "非 ASCII" },
+    { "input": "аbc", "valid": false, "note": "西里尔字母 а（U+0430）" },
+    { "input": "abc%20", "valid": false },
+    { "input": "a/b", "valid": false }
+  ]
+}
