@@ -30,7 +30,7 @@ MVP 阶段的用户量很小，瓶颈不在 Session 查询。多一个 Redis 就
 
 ## 后果
 
-- 本地和 CI 只需要 PostgreSQL 和 MinIO。
+- 本地和 CI 只需要 PostgreSQL 和一个 S3 兼容存储。
 - 高并发时 session 查询会压到数据库上。触发条件（计划第 8 节「增长信号」）出现后再评估缓存或 Redis，届时需要新写 ADR。
 
 ## 被否决的方案

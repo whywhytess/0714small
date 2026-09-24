@@ -11,7 +11,10 @@
 
 1. **生产环境暂定 AWS S3**，使用私有桶，并开启 **Block Public Access** 和**对象版本控制（Versioning）**。
 2. 代码只使用 S3 兼容 API 的一个小子集：`PutObject`、`GetObject`、`HeadObject`、`DeleteObject`、`ListObjectsV2`。不依赖某个供应商的专有功能。
-3. **本地和 CI 使用 MinIO**，镜像固定到具体版本（MinIO 社区版已不再持续发布新镜像，所以固定一个已知可用的 tag，并记录在 `infra/compose`）。
+3. **本地和 CI 使用 RustFS**（`rustfs/rustfs:1.0.0`，Apache-2.0），镜像固定到具体版本。
+   - 原计划用 MinIO，但 2026-09-24 验证时发现 MinIO 镜像在 Docker Hub 和 quay.io 上都已无法匿名拉取（返回 401）。本机之所以能跑，只是因为旧项目留下了缓存；第一次 CI 运行就因此失败。
+   - 替换前用 AWS SDK 实测了本项目需要的操作：建桶、开启版本控制、Put/Get/Head/ListObjectsV2/Delete、删除标记、`If-Match` 和 `If-None-Match` 条件请求（不满足时返回 412）。全部符合 S3 语义。
+   - Compose 服务和环境变量使用中性命名（`s3`、`S3_*`），以后更换本地实现时不需要改名。
 4. 按用途分离凭据：
    - 控制面：读写 `sites/*`
    - Gateway：只读
@@ -23,7 +26,8 @@
 
 - 所有对站点文件的读取都经过 Gateway，没有公开的桶 URL。
 - 开启版本控制会增加存储量，需要算进预算。
-- MinIO 和 S3 的行为有差异（例如条件写入、错误码），这些差异点需要在 staging 上用真实 S3 验证。
+- 本地实现（RustFS）和 AWS S3 的行为可能有差异，例如错误码细节、一致性、生命周期规则。这些差异点需要在 staging 上用真实 S3 验证，不能只依赖本地测试结果。
+- RustFS 的 1.0 版本刚发布不久，成熟度不如 MinIO。它只用于本地和 CI；如果遇到兼容问题，可以换成 SeaweedFS 等其他 S3 兼容实现（服务名和变量名都已经是中性的）。
 
 ## 被否决的方案
 

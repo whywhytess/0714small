@@ -1,4 +1,4 @@
-# 本地开发与 CI 的依赖：PostgreSQL + MinIO + Mailpit。不使用 Redis（ADR 0004）。
+# 本地开发与 CI 的依赖：PostgreSQL + S3 兼容存储（RustFS）+ Mailpit。不使用 Redis（ADR 0004）。
 # 默认值与根目录 .env.example 一致；只用于本地，不用于 staging/生产。
 name: small0714
 
@@ -22,20 +22,21 @@ services:
       timeout: 3s
       retries: 30
 
-  minio:
-    # MinIO 社区版已不在 Docker Hub 发布；固定 quay.io 上已知可用的版本（ADR 0005）。
-    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
-    command: ["server", "/data", "--console-address", ":9001"]
+  s3:
+    # S3 兼容存储，只用于本地和 CI（ADR 0005）。
+    # MinIO 镜像已无法匿名拉取（Docker Hub 与 quay.io 均返回 401），改用 RustFS（Apache-2.0）。
+    image: rustfs/rustfs:1.0.0
     environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minio_dev}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minio_dev_password}
+      RUSTFS_ACCESS_KEY: ${S3_ROOT_USER:-s3_dev}
+      RUSTFS_SECRET_KEY: ${S3_ROOT_PASSWORD:-s3_dev_password}
+      RUSTFS_CONSOLE_ENABLE: "true"
     ports:
-      - "127.0.0.1:${MINIO_PORT:-59000}:9000"
-      - "127.0.0.1:${MINIO_CONSOLE_PORT:-59001}:9001"
+      - "127.0.0.1:${S3_PORT:-59000}:9000"
+      - "127.0.0.1:${S3_CONSOLE_PORT:-59001}:9001"
     volumes:
-      - minio-data:/data
+      - s3-data:/data
     healthcheck:
-      test: ["CMD", "curl", "-fsS", "http://localhost:9000/minio/health/live"]
+      test: ["CMD", "curl", "-fsS", "http://localhost:9000/health"]
       interval: 2s
       timeout: 3s
       retries: 30
@@ -53,4 +54,4 @@ services:
 
 volumes:
   postgres-data:
-  minio-data:
+  s3-data:

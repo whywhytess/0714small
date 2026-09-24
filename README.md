@@ -17,7 +17,7 @@ app.example.com  ──►  apps/web       Next.js 控制面（页面 + API）�
 *.sites-example.net ─► apps/gateway  Go 静态 Gateway，仅 GET/HEAD，只读 DB + 只读对象
                         │
                         ├─ PostgreSQL（用户、Session、站点、草稿、部署清单、关注、审计、jobs）
-                        └─ S3 私有桶（本地 MinIO）
+                        └─ S3 私有桶（本地为 RustFS）
 ```
 
 - 控制面与用户站点使用**不同注册域**；用户代码只在站点域运行，读不到控制面 Cookie。
@@ -32,7 +32,7 @@ app.example.com  ──►  apps/web       Next.js 控制面（页面 + API）�
 | `apps/gateway` | Go 静态 Gateway |
 | `packages/db` | Drizzle Schema 与迁移 |
 | `packages/contracts` | 跨服务数据结构、API 约定与共享测试向量 |
-| `infra/compose` | 本地 PostgreSQL / MinIO / 测试邮件 |
+| `infra/compose` | 本地 PostgreSQL / S3 兼容存储（RustFS）/ 测试邮件 |
 | `docs/scope` | 范围冻结 |
 | `docs/adr` | 架构决策记录 |
 | `docs/devlog` | 每日开发记录 |
@@ -66,7 +66,7 @@ app.example.com  ──►  apps/web       Next.js 控制面（页面 + API）�
 ```sh
 cp .env.example .env        # 本地开发用的示例值
 pnpm install
-pnpm infra:up               # PostgreSQL :55432 · MinIO :59000（控制台 :59001）· Mailpit :8025
+pnpm infra:up               # PostgreSQL :55432 · S3（RustFS）:59000（控制台 :59001）· Mailpit :8025
 pnpm infra:init             # 运行迁移 + 创建存储桶（开启版本控制）
 pnpm smoke                  # 检查数据库、只读角色、对象存储、邮件
 ```

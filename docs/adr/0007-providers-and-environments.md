@@ -13,8 +13,8 @@
 
 | 环境 | 数据库 | 对象存储 | 域名 | 凭据 |
 |---|---|---|---|---|
-| Local | Compose PostgreSQL | Compose MinIO | `*.localhost` / hosts 文件 | `.env`（不提交） |
-| CI | Compose PostgreSQL | Compose MinIO | 不需要 | CI 临时生成 |
+| Local | Compose PostgreSQL | Compose RustFS（S3 兼容） | `*.localhost` / hosts 文件 | `.env`（不提交） |
+| CI | Compose PostgreSQL | Compose RustFS（S3 兼容） | 不需要 | CI 临时生成 |
 | Staging | 独立的托管 PostgreSQL 实例 | 独立的桶 | 独立的一对测试域名 | 独立凭据，与生产不共用 |
 | Production | 托管 PostgreSQL | 私有 S3 桶（开启版本控制） | 正式的一对域名 | 只有本人能操作 |
 

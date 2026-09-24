@@ -12,7 +12,7 @@
   - [!] 旧项目未提交文件的密钥检查：需要本人在旧仓库执行（见 devlog D1）
 - [x] **D2** ADR 0001–0007；最小威胁表（`docs/security/threat-model.md`）
   - [!] ADR 0007 里的供应商、PITR、预算需要本人决定
-- [x] **D3** `apps/web`、`apps/gateway`、`packages/db`、`packages/contracts`；Compose（PostgreSQL / MinIO / Mailpit）与 `.env.example`；空库迁移和冒烟测试通过
+- [x] **D3** `apps/web`、`apps/gateway`、`packages/db`、`packages/contracts`；Compose（PostgreSQL / RustFS / Mailpit）与 `.env.example`；空库迁移和冒烟测试通过
 - [~] **D4** CI workflow（密钥扫描、TS、Go、集成）、PR 模板
   - [ ] 推送后在 GitHub 上跑通 CI
   - [ ] main 分支保护（`docs/runbooks/github-setup.md`）
