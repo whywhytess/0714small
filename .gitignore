@@ -1,0 +1,33 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Secrets — 只提交 *.example 模板
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+dist/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+.turbo/
+npm-debug.log*
+pnpm-debug.log*
+
+# Go
+/apps/gateway/bin/
+*.test
+*.out
+
+# Local data (Compose volumes)
+/infra/compose/data/
