@@ -11,7 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/whywhytess/small0714/apps/gateway/internal/server"
+	"github.com/whywhytess/0714small/apps/gateway/internal/server"
 )
 
 func main() {

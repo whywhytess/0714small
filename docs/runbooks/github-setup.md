@@ -1,6 +1,6 @@
 # GitHub 仓库设置
 
-仓库：`whywhytess/small0714`（**公开**，任何提交的内容都能被所有人看到）。
+仓库：`whywhytess/0714small`（**公开**，任何提交的内容都能被所有人看到）。
 
 这些操作会改变远程仓库的设置，只由本人执行，或者由本人确认后让 AI 执行。
 
@@ -15,7 +15,7 @@ git push -u origin main
 前提：`main` 已存在于远程仓库。
 
 ```sh
-gh api -X PUT repos/whywhytess/small0714/branches/main/protection \
+gh api -X PUT repos/whywhytess/0714small/branches/main/protection \
   --input - <<'JSON'
 {
   "required_status_checks": {
@@ -50,14 +50,14 @@ JSON
 验证：
 
 ```sh
-gh api repos/whywhytess/small0714/branches/main/protection --jq '.required_status_checks.contexts'
+gh api repos/whywhytess/0714small/branches/main/protection --jq '.required_status_checks.contexts'
 ```
 
 ## 3. 仓库安全设置
 
 ```sh
 # 开启 secret scanning 与 push protection（公开仓库免费）
-gh api -X PATCH repos/whywhytess/small0714 --input - <<'JSON'
+gh api -X PATCH repos/whywhytess/0714small --input - <<'JSON'
 {
   "security_and_analysis": {
     "secret_scanning": { "status": "enabled" },
@@ -71,7 +71,7 @@ gh api -X PATCH repos/whywhytess/small0714 --input - <<'JSON'
 JSON
 
 # Dependabot 安全告警
-gh api -X PUT repos/whywhytess/small0714/vulnerability-alerts
+gh api -X PUT repos/whywhytess/0714small/vulnerability-alerts
 ```
 
 ## 4. 验收：失败的构建不能合并
