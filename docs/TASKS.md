@@ -9,17 +9,18 @@
 **Gate**：仓库可独立运行；MVP 范围、接口约定、CI 和安全规则已记录。
 
 - [x] **D1** 新建仓库、README、任务板、分支规则；MVP Scope Freeze v1 草案
-  - [!] 旧项目未提交文件的密钥检查：需要本人在旧仓库执行（见 devlog D1）
+  - [x] 旧项目密钥检查：git 全历史 gitleaks 没有发现泄露；`.env` 从未提交，外部服务密钥均为空；未提交的 PDF 没有问题
 - [x] **D2** ADR 0001–0007；最小威胁表（`docs/security/threat-model.md`）
   - [!] ADR 0007 里的供应商、PITR、预算需要本人决定
 - [x] **D3** `apps/web`、`apps/gateway`、`packages/db`、`packages/contracts`；Compose（PostgreSQL / RustFS / Mailpit）与 `.env.example`；空库迁移和冒烟测试通过
-- [~] **D4** CI workflow（密钥扫描、TS、Go、集成）、PR 模板
-  - [ ] 推送后在 GitHub 上跑通 CI
-  - [ ] main 分支保护（`docs/runbooks/github-setup.md`）
-  - [ ] 验证失败的构建不能合并
+- [x] **D4** CI workflow（密钥扫描、TS、Go、集成）、PR 模板
+  - [x] 推送后在 GitHub 上跑通 CI
+  - [x] main 分支保护（`docs/runbooks/github-setup.md`）
+  - [x] 验证失败的构建不能合并（PR #2：lint 失败 → BLOCKED，已关闭）
 - [~] **D5** Staging 方案、备份目标、事故回滚 runbook、法律核查清单
+  - [x] 第一条 PR 经本人 review 后合并
   - [ ] 本人审阅 W0 全部文档（Scope Freeze、ADR 状态改为“接受”）
-  - [ ] 第一条 PR 经本人 review 后合并
+  - [!] ADR 0007 待决项：托管 PostgreSQL、运行平台、邮件、地域、预算、恢复目标
 
 ## W1 — 注册、认证、Session
 
